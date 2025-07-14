@@ -1,7 +1,4 @@
 module.exports = ({ region, instanceType, amiId, keyName }) => `
-provider "aws" {
-region = "${region}"
-}
 
 resource "aws_instance" "example" {
 ami = "${amiId}"

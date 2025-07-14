@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI-Powered Infra Provisioning Tool with MCP</title>
+  <style>
+    :root {
+      --background-color: #f9f9f9;
+      --text-color: #1f1f1f;
+      --text-color-light: #444;
+      --primary-color: #222;
+      --link-color: #0077cc;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1.5em 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    main {
+      max-width: 960px;
+      margin: auto;
+      padding: 2em;
+    }
+
+    h2 {
+      color: #333;
+      border-left: 4px solid #ff9900;
+      padding-left: 12px;
+      margin-top: 2em;
+    }
+
+    p, li {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: var(--text-color-light);
+    }
+
+    ul {
+      padding-left: 1.5em;
+    }
+
+    .step {
+      margin-bottom: 30px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 20px;
+    }
+
+    img {
+      max-width: 100%;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .code-block {
+      background-color: #f4f4f4;
+      padding: 1em;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AI-Powered Infrastructure Provisioning with MCP & Terraform</h1>
+</header>
+
+<main>
+  <div class="step">
+    <h2>🌟 Introduction</h2>
+    <p>This project demonstrates how AI agents can dynamically provision infrastructure using Terraform based on human-readable prompts. Powered by Modal Context Protocol (MCP), this tool enables secure, contextual decision-making via LLMs like Gemini or Claude, and maps user requests to predefined Terraform templates.</p>
+  </div>
+
+  <div class="step">
+    <h2>🔧 What Is MCP (Modal Context Protocol)?</h2>
+    <p>MCP is a client-server protocol that allows AI agents to operate on your behalf in real-world systems. It securely transfers context (who you are, what you want, and what tools are available) so that the AI can act meaningfully — whether it’s creating infrastructure, fetching data, or triggering automation.</p>
+  </div>
+
+  <div class="step">
+    <h2>📌 How It Works – End-to-End Flow</h2>
+    <p>Currently, the infrastructure generation is triggered through an API call. Users send structured JSON payloads, which the MCP server interprets using templates and generates Terraform scripts. While the current model is API-driven, prompt-based natural interaction (like using a chat or voice interface) is part of our future roadmap.</p>
+    <ul>
+      <li>User enters a structured request via API (e.g., EC2 + S3 payload).</li>
+      <li>The backend parses the payload and fetches corresponding Terraform templates.</li>
+      <li>Templates are dynamically filled and combined to generate main.tf.</li>
+      <li>Terraform init and apply are executed server-side to provision the infrastructure.</li>
+      <li>Each session has isolated output and state tracking.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>📂 Repository Code Structure</h2>
+    <div class="code-block">
+terraform-generator/<br>
+├── templates/<br>
+│   ├── ec2.js<br>
+│   ├── s3.js<br>
+│   └── vpc.js<br>
+├── utils/<br>
+│   ├── validator.js<br>
+│   └── terraformRunner.js<br>
+├── generateTerraform.js<br>
+├── server.js<br>
+├── .env<br>
+└── output/<br>
+    </div>
+    <p>The templates directory holds service-specific Terraform generators. The generateTerraform.js script dynamically constructs main.tf using user input and invokes Terraform operations through the terraformRunner utility. All user-generated outputs are stored in the output folder using UUID-based isolation.</p>
+  </div>
+
+  <div class="step">
+    <h2>⚙️ Example API Request</h2>
+    <div class="code-block">
+curl -X POST http://localhost:3000/generate_terraform \<br>
+-H "Content-Type: application/json" \<br>
+-d '{<br>
+  "ec2": { "region": "ap-south-1", "instanceType": "t2.micro", "amiId": "ami-123abc", "keyName": "my-key" },<br>
+  "s3": { "bucketName": "my-bucket" }<br>
+}'
+    </div>
+  </div>
+
+  <div class="step">
+    <h2>📦 State Management</h2>
+    <p>Each Terraform run is isolated per session using a UUID. The generated files and state are saved in /output/&lt;sessionId&gt; so that users can track and destroy resources later if needed.</p>
+  </div>
+
+  <div class="step">
+    <h2>🔐 Security – Least Privilege</h2>
+    <p>The system follows the principle of least privilege using IAM roles or scoped credentials. Optionally, Service Control Policies (SCPs) can be used for org-level boundaries.</p>
+  </div>
+
+  <div class="step">
+    <h2>💡 Why MCP Makes This Possible</h2>
+    <p>Without MCP, an LLM wouldn't know who you are, what templates it can use, or what permissions it has. MCP acts as the structured, secure glue between user prompts and safe infrastructure actions.</p>
+  </div>
+
+  <div class="step">
+    <h2>📌 Future Possibilities</h2>
+    <ul>
+      <li>Support for multi-cloud templates (GCP, Azure)</li>
+      <li>UI + voice-based prompt generation (LLM frontend integration)</li>
+      <li>Dynamic manifest-based service discovery</li>
+      <li>Agent feedback loop with real-time validation</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>✅ Conclusion</h2>
+    <p>This AI-powered DevOps tool introduces a revolutionary approach to infrastructure provisioning — where users describe their requirements in natural language (future) or structured requests (present), and the system provisions resources safely and intelligently using Terraform and the MCP server-client architecture.</p>
+  </div>
+
+</main>
+</body>
+</html>
