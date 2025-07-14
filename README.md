@@ -1,7 +1,7 @@
 # 🛠️ Dynamic Infrastructure Provisioning with Terraform + MCP
 
 This project is an AI-driven platform that provisions AWS infrastructure dynamically using user prompts. It leverages:
-
+ 
 * Terraform for infrastructure-as-code
 * An MCP (Model Context Protocol) client-server architecture
 * Node.js backend
